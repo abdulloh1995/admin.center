@@ -58,6 +58,7 @@ if (isset($_GET['page'])) {
                 }
                 ?>
                 <th scope="col"> <a href="?<?php echo  $sortparam ?>"><?= $icon ?></a> ID
+                <th scope="col">Image</th>
                 <th scope="col">First name </th>
                 <th scope="col">Last name</th>
                 <th scope="col">Phone</th>
@@ -78,6 +79,7 @@ if (isset($_GET['page'])) {
                     <tr>
                         <td><?php echo $teacherdata["id"] ?></td>
                         <td><?php echo $teacherdata["first_name"] ?></td>
+                        <td><img style="width: 50px;" src="./uploads/<?php echo $teacherdata["image"] ?>" alt="user_photo"></td>
                         <td><?php echo $teacherdata["last_name"] ?></td>
                         <td><?php echo $teacherdata["phone"] ?></td>
                         <td><?php echo $teacherdata["address"] ?></td>

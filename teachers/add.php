@@ -1,35 +1,5 @@
 <?php
 include '../config/db.php';
-try {
-    if (isset($_POST["submit"])) {
-        // print_r($_POST);
-        // die;
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $phone = $_POST['phone'];
-        $address = $_POST['address'];
-
-        $params = [
-            ':first_name' => $first_name,
-            ':last_name' => $last_name,
-            ':phone' => $phone,
-            ':address' => $address
-        ];
-
-        $sql = "INSERT INTO `teacher`(`first_name`, `last_name`, `phone`, `address`) VALUES (:first_name, :last_name, :phone, :address)";
-
-        $stmt = $pdoConn->prepare($sql);
-        if ($stmt->execute($params)) {
-            $totalRows = $stmt->rowCount();
-            header("Location: index.php?msg=New record created successfully");
-        } else {
-            echo "Failed";
-        }
-    }
-} catch (PDOException $e) {
-    header("Location: index.php?msgerr=Bazada xatolik bor");
-}
-
 include '../inc/hedaer.php';
 
 ?>
@@ -40,7 +10,7 @@ include '../inc/hedaer.php';
     </div>
 
     <div class="container d-flex justify-content-center">
-        <form action="" method="post" style="width:50vw; min-width:300px;">
+        <form action="upload.php" method="post" style="width:50vw; min-width:300px;" enctype="multipart/form-data">
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">First name:</label>
@@ -61,6 +31,10 @@ include '../inc/hedaer.php';
                 <div class="col">
                     <label class="form-label">Address</label>
                     <input type="text" class="form-control" name="address" placeholder="Tashkent city">
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Rasim</label>
+                    <input class="form-control" name="image" type="file" id="image">
                 </div>
             </div>
 

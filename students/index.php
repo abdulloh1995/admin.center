@@ -48,6 +48,7 @@ if (isset($_GET['page'])) {
         <thead class="table-dark">
             <tr style="font-size: 14px;">
                 <th scope="col">ID</th>
+                <th>Image</th>
                 <th scope="col"> <a href="?sort=first_name,asc">+</a> Full name <a href="?sort=first_name,desc">-</a> </th>
                 <th scope="col">Phone</th>
                 <th scope="col">email</th>
@@ -66,7 +67,7 @@ if (isset($_GET['page'])) {
             <?php
             $offset = ($page - 1) * LIMIT;
             // echo $offset;
-            $sql = "SELECT s.id student_id, CONCAT_WS(' ', s.last_name, s.first_name) fullname, s.phone sphone, s.email semail, 
+            $sql = "SELECT s.id student_id, CONCAT_WS(' ', s.last_name, s.first_name) fullname, s.phone sphone, s.email semail, s.image img,
                     g.id group_id, g.name group_name, c.name course_name, g.start_time, g.end_time, g.start_date, g.end_date, g.count_student, 
                     CONCAT_WS(' ', t.last_name, t.first_name) teacher
                     FROM `student` s
@@ -75,8 +76,7 @@ if (isset($_GET['page'])) {
                     JOIN course c on c.id = g.course_id
                     JOIN teacher t on t.id = g.teacher_id
                     WHERE g.status = 1
-                    order by {$order}
-                    limit $offset," . LIMIT;
+                    order by {$order}";
             // echo $sql;
             $stmt2 = $pdoConn->prepare($sql);
             $stmt2->execute();
@@ -85,29 +85,33 @@ if (isset($_GET['page'])) {
             // echo $totalRows;
             if ($totalRows > 0) {
                 while ($studentdata = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                    // echo '<pre>';
+                    // print_r($studentdata);
             ?>
                     <tr>
-                        <td><?php echo $studentdata["student_id"] ?></td>
-                        <td><?php echo $studentdata["fullname"] ?></td>
-                        <td><?php echo $studentdata["sphone"] ?></td>
-                        <td><?php echo $studentdata["semail"] ?></td>
-                        <td><?php echo $studentdata["group_name"] ?></td>
-                        <td><?php echo $studentdata["course_name"] ?></td>
-                        <td><?php echo $studentdata["start_time"] ?></td>
-                        <td><?php echo $studentdata["end_time"] ?></td>
-                        <td><?php echo $studentdata["start_date"] ?></td>
-                        <td><?php echo $studentdata["end_date"] ?></td>
-                        <td><?php echo $studentdata["count_student"] - $totalRows ?></td>
-                        <td><?php echo $studentdata["teacher"] ?></td>
+                        <td><?= $studentdata["student_id"] ?></td>
+                        <td><img class="w-25" src="./uploads/<?= $studentdata["img"] ?>" class="rounded" alt="..."></td>
+                        <td><?= $studentdata["fullname"] ?></td>
+                        <td><?= $studentdata["sphone"] ?></td>
+                        <td><?= $studentdata["semail"] ?></td>
+                        <td><?= $studentdata["group_name"] ?></td>
+                        <td><?= $studentdata["course_name"] ?></td>
+                        <td><?= $studentdata["start_time"] ?></td>
+                        <td><?= $studentdata["end_time"] ?></td>
+                        <td><?= $studentdata["start_date"] ?></td>
+                        <td><?= $studentdata["end_date"] ?></td>
+                        <td><?= $studentdata["count_student"] - $totalRows ?></td>
+                        <td><?= $studentdata["teacher"] ?></td>
                         <td>
                             <div class="d-flex flex-column justify-content-between">
-                                <a href="edit.php?id=<?php echo $studentdata["student_id"] ?>" class="link-warning"><i class="fa-solid fa-pen-to-square fs-5"></i></a>
-                                <a href="delete.php?id=<?php echo $studentdata["student_id"] ?>" class="link-danger"><i class="fa-solid fa-trash fs-5"></i></a>
+                                <a href="edit.php?id=<?= $studentdata["student_id"] ?>" class="link-warning"><i class="fa-solid fa-pen-to-square fs-5"></i></a>
+                                <a href="delete.php?id=<?= $studentdata["student_id"] ?>" class="link-danger"><i class="fa-solid fa-trash fs-5"></i></a>
                             </div>
                         </td>
                     </tr>
                 <?php
                 }
+                die;
             } else {
                 ?>
                 <h1>Add Student</h1>
